@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Diani Connect | Home{% endblock %}
+
+{% block content %}
+<section class="bg-white rounded-2xl shadow-sm p-8 md:p-12 grid md:grid-cols-2 gap-8">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-bold">Find trusted local services in Diani & Kwale County.</h1>
+        <p class="mt-4 text-slate-600">Browse providers, request bookings, and build lasting relationships with verified professionals.</p>
+        <div class="mt-6 flex gap-4">
+            <a href="/services/" class="px-5 py-3 bg-emerald-600 text-white rounded-lg">Browse Services</a>
+            <a href="/become-a-provider/" class="px-5 py-3 border border-emerald-600 text-emerald-700 rounded-lg">Become a Provider</a>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+        {% for area in areas %}
+            <div class="rounded-lg border p-4 bg-emerald-50 text-emerald-700">
+                <h3 class="font-semibold">{{ area.name }}</h3>
+                <p class="text-xs text-emerald-600">Explore local services</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mt-12">
+    <h2 class="text-2xl font-semibold">Popular Categories</h2>
+    <div class="grid md:grid-cols-3 gap-4 mt-4">
+        {% for category in categories %}
+            <div class="border rounded-lg p-4 bg-white">
+                <h3 class="font-semibold">{{ category.name }}</h3>
+                <p class="text-sm text-slate-500">Discover trusted experts.</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mt-12">
+    <h2 class="text-2xl font-semibold">Featured Services</h2>
+    <div class="grid md:grid-cols-3 gap-4 mt-4">
+        {% for service in featured_services %}
+            {% include "partials/service_card.html" with service=service %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mt-12 grid md:grid-cols-2 gap-6">
+    <div class="bg-white p-6 rounded-lg border">
+        <h3 class="text-xl font-semibold">Community Reviews</h3>
+        <div class="mt-4 space-y-3">
+            {% for review in latest_reviews %}
+                <div class="border rounded-md p-3">
+                    <p class="text-sm text-slate-600">"{{ review.comment|truncatewords:20 }}"</p>
+                    <p class="text-xs text-slate-500 mt-1">⭐ {{ review.rating }} for {{ review.service.title }}</p>
+                </div>
+            {% empty %}
+                <p class="text-sm text-slate-500">No reviews yet. Be the first to book!</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-lg border">
+        <h3 class="text-xl font-semibold">Latest Tips</h3>
+        <div class="mt-4 space-y-3">
+            {% for post in posts %}
+                <a href="{{ post.get_absolute_url }}" class="block border rounded-md p-3 hover:border-emerald-600">
+                    <h4 class="font-semibold">{{ post.title }}</h4>
+                    <p class="text-sm text-slate-500">{{ post.excerpt|truncatewords:18 }}</p>
+                </a>
+            {% empty %}
+                <p class="text-sm text-slate-500">Blog updates coming soon.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

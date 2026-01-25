@@ -1,0 +1,16 @@
+<div class="bg-white rounded-lg shadow-sm border p-4 flex flex-col gap-2">
+    <div class="flex items-start justify-between">
+        <div>
+            <h3 class="font-semibold text-lg"><a href="{{ service.get_absolute_url }}" class="hover:text-emerald-600">{{ service.title }}</a></h3>
+            <p class="text-sm text-slate-500">{{ service.category.name }} • {{ service.area.name }}</p>
+        </div>
+        {% if service.provider.providerprofile.verified %}
+            <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">Verified</span>
+        {% endif %}
+    </div>
+    <p class="text-sm text-slate-600 line-clamp-3">{{ service.description|truncatewords:20 }}</p>
+    <div class="text-sm flex items-center justify-between">
+        <span class="font-semibold text-emerald-700">KES {{ service.price_amount }} / {{ service.get_price_type_display }}</span>
+        <span class="text-slate-500">⭐ {{ service.rating_average }} ({{ service.review_count }})</span>
+    </div>
+</div>

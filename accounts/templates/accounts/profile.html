@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Profile | Diani Connect{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold">Profile Settings</h1>
+<form method="post" class="mt-4 bg-white border rounded-lg p-4 space-y-3">
+    {% csrf_token %}
+    <div>
+        <label class="text-sm font-medium">Phone</label>
+        <input type="text" name="phone" value="{{ profile.phone }}" class="w-full border rounded p-2">
+    </div>
+    <button class="px-4 py-2 bg-emerald-600 text-white rounded">Save</button>
+</form>
+{% endblock %}

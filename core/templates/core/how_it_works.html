@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}How it Works | Diani Connect{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold">How Diani Connect Works</h1>
+<div class="grid md:grid-cols-2 gap-6 mt-6">
+    <div class="bg-white p-6 rounded-lg border">
+        <h2 class="font-semibold text-xl">For Customers</h2>
+        <ol class="list-decimal ml-5 mt-3 text-slate-600 space-y-2">
+            <li>Browse trusted providers by category and area.</li>
+            <li>Request a booking with your preferred date and location.</li>
+            <li>Track booking status and leave a review after completion.</li>
+        </ol>
+    </div>
+    <div class="bg-white p-6 rounded-lg border">
+        <h2 class="font-semibold text-xl">For Providers</h2>
+        <ol class="list-decimal ml-5 mt-3 text-slate-600 space-y-2">
+            <li>Create service listings with pricing and availability.</li>
+            <li>Accept or decline bookings with one click.</li>
+            <li>Build trust with reviews and verified badges.</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}

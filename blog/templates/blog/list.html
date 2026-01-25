@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Blog | Diani Connect{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold">Diani Connect Blog</h1>
+<div class="mt-6 space-y-4">
+    {% for post in posts %}
+        <article class="bg-white border rounded-lg p-4">
+            <h2 class="text-xl font-semibold"><a href="{{ post.get_absolute_url }}" class="hover:text-emerald-600">{{ post.title }}</a></h2>
+            <p class="text-sm text-slate-500">{{ post.published_at|date:"M d, Y" }}</p>
+            <p class="mt-2 text-slate-600">{{ post.excerpt }}</p>
+        </article>
+    {% empty %}
+        <p>No posts yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

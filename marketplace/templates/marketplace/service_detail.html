@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.title }} | Diani Connect{% endblock %}
+
+{% block content %}
+<div class="grid md:grid-cols-3 gap-6">
+    <div class="md:col-span-2">
+        <h1 class="text-3xl font-bold">{{ service.title }}</h1>
+        <p class="text-slate-500">{{ service.category.name }} • {{ service.area.name }}</p>
+        <p class="mt-4 text-slate-600">{{ service.description }}</p>
+        <div class="mt-4 text-lg font-semibold text-emerald-700">KES {{ service.price_amount }} / {{ service.get_price_type_display }}</div>
+
+        <section class="mt-10">
+            <h2 class="text-xl font-semibold">Reviews</h2>
+            <div id="reviews" class="space-y-3 mt-4">
+                {% for review in reviews %}
+                    {% include "marketplace/partials/review_item.html" with review=review %}
+                {% empty %}
+                    <p class="text-sm text-slate-500">No reviews yet.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+    <aside class="bg-white border rounded-lg p-5">
+        <h2 class="text-lg font-semibold">Book this service</h2>
+        <div id="booking-form" class="mt-4">
+            <form hx-post="/services/{{ service.slug }}/book/" hx-target="#booking-form" class="space-y-3">
+                {% csrf_token %}
+                {{ booking_form.as_p }}
+                <button class="px-4 py-2 bg-emerald-600 text-white rounded" type="submit">Request Booking</button>
+            </form>
+        </div>
+        {% if eligible_bookings %}
+            {% for booking in eligible_bookings %}
+                <div class="mt-6">
+                    <h3 class="text-sm font-semibold">Leave a review</h3>
+                    <form hx-post="/reviews/{{ booking.id }}/" hx-target="#reviews" hx-swap="afterbegin" class="space-y-2 mt-2">
+                        {% csrf_token %}
+                        {{ review_form.as_p }}
+                        <button class="px-3 py-2 bg-slate-800 text-white rounded text-sm">Submit Review</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </aside>
+</div>
+{% endblock %}
