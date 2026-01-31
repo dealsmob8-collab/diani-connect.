@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Diani Connect{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold">Customer Dashboard</h1>
+<div class="mt-6">
+    <a href="/dashboard/bookings/" class="text-emerald-600">View all bookings</a>
+</div>
+<div class="mt-6 bg-white border rounded-lg overflow-x-auto">
+    <table class="min-w-full text-sm">
+        <thead class="bg-slate-50">
+            <tr>
+                <th class="text-left p-3">Service</th>
+                <th class="text-left p-3">Date</th>
+                <th class="text-left p-3">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+                <tr class="border-t">
+                    <td class="p-3">{{ booking.service.title }}</td>
+                    <td class="p-3">{{ booking.requested_date }}</td>
+                    <td class="p-3">{{ booking.get_status_display }}</td>
+                </tr>
+            {% empty %}
+                <tr><td class="p-3" colspan="3">No bookings yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

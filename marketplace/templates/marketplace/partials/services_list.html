@@ -1,0 +1,15 @@
+<div class="grid md:grid-cols-2 gap-4">
+    {% for service in services %}
+        {% include "partials/service_card.html" with service=service %}
+    {% empty %}
+        <p class="text-slate-500">No services found.</p>
+    {% endfor %}
+</div>
+<div class="mt-6 flex justify-between text-sm">
+    {% if services.has_previous %}
+        <a hx-get="?page={{ services.previous_page_number }}&q={{ query }}&category={{ selected_category }}&area={{ selected_area }}" hx-target="#services-results" class="text-emerald-700">Previous</a>
+    {% endif %}
+    {% if services.has_next %}
+        <a hx-get="?page={{ services.next_page_number }}&q={{ query }}&category={{ selected_category }}&area={{ selected_area }}" hx-target="#services-results" class="text-emerald-700">Load more</a>
+    {% endif %}
+</div>

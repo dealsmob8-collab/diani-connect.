@@ -1,0 +1,7 @@
+<div class="border rounded-lg p-3 bg-white">
+    <div class="flex justify-between text-sm">
+        <span class="font-semibold">⭐ {{ review.rating }}</span>
+        <span class="text-slate-400">{{ review.created_at|date:"M d, Y" }}</span>
+    </div>
+    <p class="text-slate-600 mt-2">{{ review.comment }}</p>
+</div>

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Services | Diani Connect{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold">Browse Services</h1>
+<div class="mt-6 grid md:grid-cols-4 gap-6">
+    <div class="md:col-span-1 bg-white border rounded-lg p-4">
+        <h2 class="font-semibold">Filters</h2>
+        <form class="mt-4 space-y-3" hx-get="/services/" hx-target="#services-results" hx-trigger="change">
+            <input type="text" name="q" placeholder="Search services" value="{{ query }}" class="w-full border rounded p-2">
+            <select name="category" class="w-full border rounded p-2">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="area" class="w-full border rounded p-2">
+                <option value="">All Areas</option>
+                {% for area in areas %}
+                    <option value="{{ area.id }}" {% if area.id|stringformat:"s" == selected_area %}selected{% endif %}>{{ area.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    <div class="md:col-span-3" id="services-results">
+        {% include "marketplace/partials/services_list.html" %}
+    </div>
+</div>
+{% endblock %}

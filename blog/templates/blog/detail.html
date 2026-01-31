@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} | Diani Connect{% endblock %}
+
+{% block content %}
+<article class="bg-white border rounded-lg p-6">
+    <h1 class="text-3xl font-bold">{{ post.title }}</h1>
+    <p class="text-sm text-slate-500 mt-1">{{ post.published_at|date:"M d, Y" }}</p>
+    <p class="mt-4 text-slate-700">{{ post.body }}</p>
+</article>
+{% endblock %}

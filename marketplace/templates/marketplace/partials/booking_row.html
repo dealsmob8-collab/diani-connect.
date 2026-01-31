@@ -1,0 +1,18 @@
+<tr class="border-t">
+    <td class="p-3">{{ booking.service.title }}</td>
+    <td class="p-3">{{ booking.customer.username }}</td>
+    <td class="p-3">{{ booking.requested_date }} {{ booking.requested_time }}</td>
+    <td class="p-3">
+        <span class="px-2 py-1 text-xs rounded bg-slate-100">{{ booking.get_status_display }}</span>
+    </td>
+    <td class="p-3 flex gap-2">
+        {% if booking.status == 'requested' %}
+            <button hx-post="/provider/bookings/{{ booking.id }}/accept/" hx-target="closest tr" class="text-xs px-2 py-1 bg-emerald-100 rounded">Accept</button>
+            <button hx-post="/provider/bookings/{{ booking.id }}/decline/" hx-target="closest tr" class="text-xs px-2 py-1 bg-red-100 rounded">Decline</button>
+        {% elif booking.status == 'accepted' %}
+            <button hx-post="/provider/bookings/{{ booking.id }}/complete/" hx-target="closest tr" class="text-xs px-2 py-1 bg-emerald-100 rounded">Complete</button>
+        {% else %}
+            <span class="text-xs text-slate-400">No actions</span>
+        {% endif %}
+    </td>
+</tr>

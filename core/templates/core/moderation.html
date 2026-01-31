@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Moderation | Diani Connect{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold">Moderation Panel</h1>
+<p class="text-slate-600 mt-2">Approve providers, verify badges, and manage listings/reviews.</p>
+
+<section class="mt-8">
+    <h2 class="text-xl font-semibold">Providers</h2>
+    <div class="bg-white border rounded-lg mt-4 overflow-x-auto">
+        <table class="min-w-full text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="text-left p-3">Business</th>
+                    <th class="text-left p-3">Owner</th>
+                    <th class="text-left p-3">Approved</th>
+                    <th class="text-left p-3">Verified</th>
+                    <th class="text-left p-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for provider in providers %}
+                    <tr class="border-t">
+                        <td class="p-3">{{ provider.business_name }}</td>
+                        <td class="p-3">{{ provider.user.username }}</td>
+                        <td class="p-3">{{ provider.is_approved|yesno:"Yes,No" }}</td>
+                        <td class="p-3">{{ provider.verified|yesno:"Yes,No" }}</td>
+                        <td class="p-3 flex gap-2">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="toggle_approved">
+                                <input type="hidden" name="object_id" value="{{ provider.id }}">
+                                <button class="text-xs px-2 py-1 rounded bg-slate-200">Toggle Approval</button>
+                            </form>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="toggle_verified">
+                                <input type="hidden" name="object_id" value="{{ provider.id }}">
+                                <button class="text-xs px-2 py-1 rounded bg-emerald-100">Toggle Verified</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td class="p-3" colspan="5">No providers yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="mt-10">
+    <h2 class="text-xl font-semibold">Listings</h2>
+    <div class="bg-white border rounded-lg mt-4 overflow-x-auto">
+        <table class="min-w-full text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="text-left p-3">Service</th>
+                    <th class="text-left p-3">Provider</th>
+                    <th class="text-left p-3">Active</th>
+                    <th class="text-left p-3">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                    <tr class="border-t">
+                        <td class="p-3">{{ service.title }}</td>
+                        <td class="p-3">{{ service.provider.username }}</td>
+                        <td class="p-3">{{ service.is_active|yesno:"Yes,No" }}</td>
+                        <td class="p-3">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="toggle_service">
+                                <input type="hidden" name="object_id" value="{{ service.id }}">
+                                <button class="text-xs px-2 py-1 rounded bg-slate-200">Toggle</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td class="p-3" colspan="4">No listings yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="mt-10">
+    <h2 class="text-xl font-semibold">Reviews</h2>
+    <div class="bg-white border rounded-lg mt-4 overflow-x-auto">
+        <table class="min-w-full text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="text-left p-3">Service</th>
+                    <th class="text-left p-3">Rating</th>
+                    <th class="text-left p-3">Hidden</th>
+                    <th class="text-left p-3">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                    <tr class="border-t">
+                        <td class="p-3">{{ review.service.title }}</td>
+                        <td class="p-3">{{ review.rating }}</td>
+                        <td class="p-3">{{ review.is_hidden|yesno:"Yes,No" }}</td>
+                        <td class="p-3">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="toggle_review">
+                                <input type="hidden" name="object_id" value="{{ review.id }}">
+                                <button class="text-xs px-2 py-1 rounded bg-slate-200">Toggle</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td class="p-3" colspan="4">No reviews yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
