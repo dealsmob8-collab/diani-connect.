@@ -1,0 +1,28 @@
+---
+import type { Product } from '@/lib/normalize';
+import WhatsAppCTA from './WhatsAppCTA.astro';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const inStock = product.stockStatus === 'instock';
+const image = product.images[0];
+const productUrl = `/product/${product.slug}/`;
+---
+<article class="rounded-xl bg-white p-4 shadow-sm">
+  <a href={productUrl}>
+    {image ? (
+      <img src={image.src} alt={image.alt} loading="lazy" class="aspect-square w-full rounded-lg object-cover" />
+    ) : (
+      <div class="flex aspect-square items-center justify-center rounded-lg bg-slate-100 text-sm">No image</div>
+    )}
+    <h3 class="mt-3 font-semibold">{product.name}</h3>
+  </a>
+  <p class="mt-1 text-lg font-bold text-brand">{product.priceLabel}</p>
+  <p class="text-xs text-slate-600">{inStock ? 'In stock' : 'Out of stock'}</p>
+  <div class="mt-3">
+    <WhatsAppCTA productName={product.name} priceLabel={product.priceLabel} url={new URL(productUrl, Astro.site).toString()} disabled={!inStock} />
+  </div>
+</article>

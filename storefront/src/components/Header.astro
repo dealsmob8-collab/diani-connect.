@@ -1,0 +1,21 @@
+---
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/search/', label: 'Search' },
+  { href: '/delivery/', label: 'Delivery' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' }
+];
+---
+<header class="bg-white shadow-sm">
+  <div class="container-main flex items-center justify-between py-4">
+    <a href="/" class="text-lg font-bold text-brand">SesictHub</a>
+    <nav aria-label="Main navigation">
+      <ul class="flex flex-wrap gap-4 text-sm">
+        {links.map((link) => (
+          <li><a class="hover:text-sky-700" href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,86 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WhatsAppCTA from '@/components/WhatsAppCTA.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { attributeValue } from '@/lib/normalize';
+import { productJsonLd } from '@/lib/seo';
+import { getStoreData } from '@/lib/woo';
+
+export async function getStaticPaths() {
+  const { products } = await getStoreData();
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const { products } = await getStoreData();
+const mainImage = product.images[0];
+const specs = [
+  ['Brand', attributeValue(product, ['brand'])],
+  ['CPU Generation', attributeValue(product, ['cpu'])],
+  ['RAM', attributeValue(product, ['ram'])],
+  ['Storage', attributeValue(product, ['storage'])],
+  ['Screen Size', attributeValue(product, ['screen'])]
+].filter(([, value]) => Boolean(value));
+const related = products
+  .filter((item) => item.slug !== product.slug)
+  .filter((item) => item.categories.some((cat) => product.categories.map((p) => p.slug).includes(cat.slug)))
+  .slice(0, 4);
+const canonicalPath = `/product/${product.slug}/`;
+const productUrl = new URL(canonicalPath, Astro.site).toString();
+---
+<BaseLayout
+  seo={{
+    title: `${product.name} | Sesicthub Kenya`,
+    description: `Buy ${product.name} in Kenya. ${product.priceLabel}. Delivery nationwide.`,
+    canonicalPath,
+    image: mainImage?.src,
+    type: 'product'
+  }}
+>
+  <article class="grid gap-8 lg:grid-cols-2">
+    <div>
+      {mainImage && <img src={mainImage.src} alt={mainImage.alt} class="w-full rounded-xl bg-white object-cover shadow-sm" loading="eager" />}
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold">{product.name}</h1>
+      <p class="mt-2 text-2xl font-bold text-brand">{product.priceLabel}</p>
+      {product.onSale && <span class="mt-2 inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800">Sale</span>}
+      <p class="mt-2 text-sm">{product.stockStatus === 'instock' ? 'In stock' : 'Out of stock'}</p>
+      <div class="mt-4">
+        <WhatsAppCTA productName={product.name} priceLabel={product.priceLabel} url={productUrl} disabled={product.stockStatus !== 'instock'} />
+      </div>
+      <div class="mt-6 overflow-hidden rounded-lg bg-white shadow-sm">
+        <table class="w-full text-sm">
+          <tbody>
+            {specs.map(([label, value]) => (
+              <tr class="border-b border-slate-100">
+                <th class="w-40 bg-slate-50 px-3 py-2 text-left font-medium">{label}</th>
+                <td class="px-3 py-2">{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+
+  <section class="mt-8">
+    <h2 class="text-xl font-semibold">Related products</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {related.map((item) => <ProductCard product={item} />)}
+    </div>
+  </section>
+
+  <div class="fixed inset-x-0 bottom-0 bg-white p-3 shadow md:hidden">
+    <WhatsAppCTA productName={product.name} priceLabel={product.priceLabel} url={productUrl} disabled={product.stockStatus !== 'instock'} />
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(productJsonLd({
+    name: product.name,
+    description: product.shortDescription || product.description,
+    image: mainImage?.src ?? '',
+    url: productUrl,
+    price: product.displayPrice?.toString() ?? '0',
+    stockStatus: product.stockStatus
+  }))} />
+</BaseLayout>

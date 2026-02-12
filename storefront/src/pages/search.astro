@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getStoreData } from '@/lib/woo';
+
+const { products } = await getStoreData();
+const searchData = products.map((product) => ({
+  name: product.name,
+  slug: product.slug,
+  priceLabel: product.priceLabel,
+  stockStatus: product.stockStatus
+}));
+---
+<BaseLayout
+  seo={{
+    title: 'Search gadgets | Sesicthub Kenya',
+    description: 'Search laptops, desktops, printers, smartphones, and accessories.',
+    canonicalPath: '/search/'
+  }}
+>
+  <h1 class="text-2xl font-bold">Search products</h1>
+  <input id="searchInput" class="mt-4 w-full rounded-md border p-3" placeholder="Search by model, brand, CPU, RAM..." />
+  <ul id="results" class="mt-4 space-y-3"></ul>
+
+  <script define:vars={{ searchData }}>
+    const input = document.getElementById('searchInput');
+    const results = document.getElementById('results');
+    const render = (items) => {
+      results.innerHTML = items
+        .map(
+          (item) => `<li class="rounded-lg bg-white p-3 shadow-sm"><a class="font-semibold" href="/product/${item.slug}/">${item.name}</a><p>${item.priceLabel} · ${item.stockStatus === 'instock' ? 'In stock' : 'Out of stock'}</p></li>`
+        )
+        .join('');
+    };
+
+    render(searchData);
+    input?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      const filtered = !query ? searchData : searchData.filter((item) => item.name.toLowerCase().includes(query));
+      render(filtered);
+    });
+  </script>
+</BaseLayout>

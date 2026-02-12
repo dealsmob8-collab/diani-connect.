@@ -1,0 +1,23 @@
+---
+interface Props {
+  productName: string;
+  priceLabel: string;
+  url: string;
+  disabled?: boolean;
+}
+
+const { productName, priceLabel, url, disabled = false } = Astro.props;
+const number = (import.meta.env.WHATSAPP_NUMBER ?? '+254700000000').replace(/\D/g, '');
+const message = encodeURIComponent(`Hi Sesicthub, I'd like to order ${productName} (${priceLabel}). Product link: ${url}`);
+const ctaLabel = disabled ? 'Ask availability on WhatsApp' : 'WhatsApp to Order';
+---
+<a
+  href={`https://wa.me/${number}?text=${message}`}
+  class:list={[
+    'inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold',
+    disabled ? 'bg-slate-300 text-slate-700' : 'bg-green-600 text-white hover:bg-green-700'
+  ]}
+  aria-disabled={disabled}
+>
+  {ctaLabel}
+</a>
