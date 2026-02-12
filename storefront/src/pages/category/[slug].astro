@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Filters from '@/components/Filters.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { getStoreData } from '@/lib/woo';
+
+export async function getStaticPaths() {
+  const { categories } = await getStoreData();
+  return categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const { products } = await getStoreData();
+const categoryProducts = products.filter((product) => product.categories.some((item) => item.slug === category.slug));
+---
+<BaseLayout
+  seo={{
+    title: `${category.name} | Sesicthub Kenya`,
+    description: `Browse ${category.name} at Sesicthub. WhatsApp-first ordering and nationwide delivery.`,
+    canonicalPath: `/category/${category.slug}/`
+  }}
+>
+  <h1 class="text-2xl font-bold">{category.name}</h1>
+  <div class="mt-6 grid gap-6 lg:grid-cols-[280px,1fr]">
+    <Filters />
+    <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {categoryProducts.map((product) => <ProductCard product={product} />)}
+    </section>
+  </div>
+</BaseLayout>

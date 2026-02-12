@@ -1,0 +1,5 @@
+/product/:slug /product/:slug/ 301
+/?product=:slug /product/:slug/ 301
+/cart / 301
+/checkout / 301
+/my-account /contact/ 301

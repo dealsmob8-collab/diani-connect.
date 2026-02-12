@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { getStoreData } from '@/lib/woo';
+
+const { products, categories } = await getStoreData();
+const featured = products.filter((product) => product.featured).slice(0, 8);
+const latest = [...products].sort((a, b) => +new Date(b.dateCreated) - +new Date(a.dateCreated)).slice(0, 8);
+const highlightProducts = featured.length > 0 ? featured : latest;
+const brands = ['HP', 'LENOVO', 'APPLE', 'DELL', 'SAMSUNG', 'ASUS'];
+const mainCategories = ['laptops', 'desktops', 'printers', 'smartphones', 'accessories'];
+---
+<BaseLayout
+  seo={{
+    title: 'Sesicthub Kenya | Laptops, Smartphones, Printers & Accessories',
+    description: 'Kenya trusted gadget store with nationwide delivery and WhatsApp-first ordering.',
+    canonicalPath: '/'
+  }}
+>
+  <section class="rounded-2xl bg-brand p-8 text-white">
+    <h1 class="text-3xl font-bold">Trusted Kenyan gadget store</h1>
+    <p class="mt-3 max-w-2xl text-sm">Buy laptops, desktops, printers and smartphones with nationwide delivery, COD options and warranty support.</p>
+  </section>
+
+  <section class="mt-8">
+    <h2 class="text-xl font-semibold">Shop by category</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      {categories.filter((c) => mainCategories.includes(c.slug)).map((category) => (
+        <a class="rounded-xl bg-white p-4 text-center shadow-sm hover:shadow" href={`/category/${category.slug}/`}>{category.name}</a>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-8">
+    <h2 class="text-xl font-semibold">Featured products</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {highlightProducts.map((product) => <ProductCard product={product} />)}
+    </div>
+  </section>
+
+  <section class="mt-8">
+    <h2 class="text-xl font-semibold">Top brands</h2>
+    <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {brands.map((brand) => <div class="rounded-lg bg-white p-3 text-center text-sm font-semibold shadow-sm">{brand}</div>)}
+    </div>
+  </section>
+
+  <section class="mt-8 rounded-xl bg-white p-6 shadow-sm">
+    <h2 class="text-xl font-semibold">Why customers trust us</h2>
+    <ul class="mt-3 list-disc pl-4 text-sm">
+      <li>Cash on Delivery and flexible payment options.</li>
+      <li>Delivery available nationwide in Kenya.</li>
+      <li>Warranty support and authentic devices.</li>
+    </ul>
+  </section>
+</BaseLayout>
